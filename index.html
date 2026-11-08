@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HASSAN X HACKER - YT Toolkit</title>
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-color: #030914;
+      --card-bg: rgba(5, 19, 38, 0.88);
+      --primary-red: #00b7ff;
+      --neon-green: #8b5cf6;
+      --accent-glow: #00e5ff;
+      --glow-red: 0 0 15px rgba(0, 183, 255, 0.8), 0 0 30px rgba(0, 183, 255, 0.4);
+      --glow-green: 0 0 15px rgba(139, 92, 246, 0.8), 0 0 25px rgba(139, 92, 246, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    }
+
+    body {
+      position: relative;
+      isolation: isolate;
+      overflow-x: hidden;
+      background-color: var(--bg-color);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 80px 15px 40px 15px;
+    }
+
+    /* Dynamic Background Canvas */
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.85;
+      transition: opacity 0.5s ease;
+    }
+
+    /* Top Navigation Header & Hamburger Menu */
+    .top-navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 65px;
+      background: rgba(3, 9, 20, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0, 183, 255, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 500;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .brand-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid var(--primary-red);
+      box-shadow: var(--glow-red);
+      object-fit: cover;
+      animation: logoGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes logoGlow {
+      0% { box-shadow: 0 0 10px #00b7ff, 0 0 20px rgba(0, 183, 255, 0.5); border-color: #00b7ff; }
+      100% { box-shadow: 0 0 18px #8b5cf6, 0 0 32px rgba(139, 92, 246, 0.7); border-color: #8b5cf6; }
+    }
+
+    .brand-header-text {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      background: linear-gradient(90deg, #00b7ff, #a78bfa, #00e5ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Hamburger Button */
+    .hamburger-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      background: rgba(0, 183, 255, 0.1);
+      border: 1px solid var(--primary-red);
+      color: #00b7ff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .hamburger-btn span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: #00b7ff;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    .hamburger-btn:hover {
+      background: var(--primary-red);
+      box-shadow: var(--glow-red);
+    }
+
+    .hamburger-btn:hover span {
+      background: #fff;
+    }
+
+    /* Side Drawer Menu */
+    .drawer-menu {
+      position: fixed;
+      top: 0;
+      right: -320px;
+      width: 300px;
+      height: 100%;
+      background: rgba(5, 15, 30, 0.96);
+      backdrop-filter: blur(20px);
+      border-left: 2px solid var(--primary-red);
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
+      z-index: 600;
+      padding: 25px 20px;
+      transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drawer-menu.active {
+      right: 0;
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 25px;
+      border-bottom: 1px solid rgba(0, 183, 255, 0.2);
+      padding-bottom: 15px;
+    }
+
+    .drawer-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary-red);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .drawer-close {
+      background: none;
+      border: none;
+      color: #aaa;
+      font-size: 20px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .drawer-close:hover {
+      color: #fff;
+    }
+
+    .bg-options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .bg-opt-btn {
+      padding: 12px 15px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(0, 183, 255, 0.25);
+      color: #ddd;
+      font-size: 14px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: 0.3s;
+    }
+
+    .bg-opt-btn i {
+      font-size: 16px;
+      color: var(--primary-red);
+      width: 20px;
+    }
+
+    .bg-opt-btn:hover, .bg-opt-btn.active {
+      background: linear-gradient(90deg, rgba(0, 183, 255, 0.25), rgba(139, 92, 246, 0.25));
+      border-color: var(--primary-red);
+      color: #fff;
+      box-shadow: var(--glow-red);
+      transform: translateX(4px);
+    }
+
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(2px);
+      z-index: 550;
+      display: none;
+    }
+
+    .drawer-overlay.active {
+      display: block;
+    }
+
+    /* Main Brand Title Section */
+    .brand-hero {
+      text-align: center;
+      margin: 15px 0 25px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-logo {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 3px solid var(--primary-red);
+      box-shadow: var(--glow-red);
+      margin-bottom: 15px;
+      object-fit: cover;
+      animation: logoGlow 3s ease-in-out infinite alternate;
+    }
+
+    h1.brand-title {
+      color: var(--primary-red);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: var(--glow-red);
+      background: linear-gradient(90deg, #00b7ff, #a78bfa, #00e5ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: titlePulse 2.8s ease-in-out infinite alternate;
+      font-size: 28px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .subtitle-badge {
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: rgba(139, 92, 246, 0.2);
+      border: 1px solid var(--neon-green);
+      color: #a78bfa;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-top: 8px;
+      box-shadow: var(--glow-green);
+    }
+
+    /* Card Container */
+    .container {
+      width: 100%;
+      max-width: 650px;
+      position: relative;
+      z-index: 1;
+      background: var(--card-bg);
+      backdrop-filter: blur(14px);
+      border: 1.5px solid rgba(0, 183, 255, 0.4);
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: var(--glow-red);
+      transition: border-color 0.3s ease;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrapper i {
+      position: absolute;
+      left: 14px;
+      color: var(--primary-red);
+      font-size: 16px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px 45px 14px 42px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid var(--primary-red);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input[type="text"]:focus {
+      box-shadow: var(--glow-red);
+      border-color: #00e5ff;
+    }
+
+    .clear-btn {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #888;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.2s;
+      display: none;
+    }
+
+    .clear-btn:hover {
+      color: #fff;
+    }
+
+    .btn-action {
+      padding: 14px;
+      background: linear-gradient(100deg, #0077ff, #7c3aed);
+      color: #fff;
+      border: none;
+      font-weight: bold;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: var(--glow-red);
+      transition: 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-action:hover {
+      background: linear-gradient(100deg, #009dff, #965cff);
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(0, 183, 255, 0.9);
+    }
+
+    .btn-action:active {
+      transform: translateY(0);
+    }
+
+    /* Results Area */
+    .result-section {
+      display: none;
+      margin-top: 25px;
+      border-top: 1px dashed rgba(0, 183, 255, 0.4);
+      padding-top: 20px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .thumb-box {
+      margin-bottom: 25px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .thumb-box p {
+      color: #a78bfa;
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .thumb-box img {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid var(--neon-green);
+      box-shadow: var(--glow-green);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .btn-group-res {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      background: linear-gradient(100deg, #00d4ff, #a78bfa);
+      color: #06101e;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 6px;
+      box-shadow: var(--glow-green);
+      transition: 0.2s;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .dl-btn:hover {
+      transform: scale(1.04);
+      filter: brightness(1.1);
+    }
+
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: none;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Developer Button */
+    .dev-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(100deg, #087cff, #7c3aed);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      box-shadow: 0 0 15px rgba(0, 183, 255, 0.65);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 100;
+      transition: 0.3s;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .dev-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 0 22px rgba(0, 183, 255, 0.95);
+    }
+
+    /* WhatsApp Popup Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(6px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 15px;
+    }
+
+    .modal-box {
+      background: var(--card-bg);
+      border: 2px solid var(--primary-red);
+      padding: 28px 22px;
+      border-radius: 16px;
+      text-align: center;
+      max-width: 340px;
+      width: 100%;
+      box-shadow: var(--glow-red);
+      animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-box h3 {
+      color: var(--primary-red);
+      margin-bottom: 12px;
+      font-size: 18px;
+      letter-spacing: 0.5px;
+    }
+
+    .modal-box p {
+      font-size: 14px;
+      margin-bottom: 22px;
+      color: #ccc;
+      line-height: 1.5;
+    }
+
+    .modal-btn {
+      padding: 12px 22px;
+      background: linear-gradient(100deg, #087cff, #7c3aed);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      width: 100%;
+      box-shadow: var(--glow-red);
+      transition: 0.2s;
+    }
+
+    .modal-btn:hover {
+      filter: brightness(1.15);
+    }
+
+    .close-btn {
+      background: transparent;
+      border: none;
+      color: #888;
+      cursor: pointer;
+      font-size: 13px;
+      display: block;
+      margin: 0 auto;
+      transition: 0.2s;
+    }
+
+    .close-btn:hover {
+      color: #fff;
+    }
+
+    /* Toast Alert Notification */
+    .toast-msg {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%) translateY(50px);
+      background: rgba(5, 19, 38, 0.95);
+      border: 1px solid var(--primary-red);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 30px;
+      box-shadow: var(--glow-red);
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.3s ease;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast-msg.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @keyframes titlePulse {
+      from { filter: drop-shadow(0 0 4px rgba(0,183,255,.55)); }
+      to { filter: drop-shadow(0 0 14px rgba(139,92,246,.9)); }
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 480px) {
+      body {
+        padding-top: 75px;
+      }
+      .brand-title {
+        font-size: 22px;
+      }
+      .container {
+        padding: 18px;
+      }
+      .btn-group-res {
+        flex-direction: column;
+      }
+      .dl-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Animated Dynamic Background Canvas -->
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <!-- Top Navbar -->
+  <header class="top-navbar">
+    <div class="brand-logo-wrap">
+      <img src="https://i.ibb.co/21qmyHBJ/jawadmd.jpg" alt="Logo" class="logo-img" onerror="this.src='https://placehold.co/100x100/00b7ff/ffffff?text=HACKER'">
+      <span class="brand-header-text">HASSAN X HACKER</span>
+    </div>
+    
+    <!-- 3-Lines Hamburger Button -->
+    <button class="hamburger-btn" id="menuToggle" aria-label="Toggle Background Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <!-- Side Drawer Menu for Background Options -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="drawer-menu" id="drawerMenu">
+    <div class="drawer-header">
+      <span class="drawer-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Select Theme</span>
+      <button class="drawer-close" id="drawerClose"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="bg-options-list">
+      <button class="bg-opt-btn active" data-bg="1">
+        <i class="fa-solid fa-code"></i> 1. Cyber Matrix Rain
+      </button>
+      <button class="bg-opt-btn" data-bg="2">
+        <i class="fa-solid fa-diagram-project"></i> 2. Constellation Nodes
+      </button>
+      <button class="bg-opt-btn" data-bg="3">
+        <i class="fa-solid fa-border-all"></i> 3. Neon Cyber Grid
+      </button>
+      <button class="bg-opt-btn" data-bg="4">
+        <i class="fa-solid fa-user-astronaut"></i> 4. Cosmic Nebula Vortex
+      </button>
+      <button class="bg-opt-btn" data-bg="5">
+        <i class="fa-solid fa-water"></i> 5. Deep Liquid Waves
+      </button>
+    </div>
+  </aside>
+
+  <!-- Popup Modal for WhatsApp Channel -->
+  <div class="modal-overlay" id="waModal">
+    <div class="modal-box">
+      <h3><i class="fa-bullhorn fa-solid"></i> JOIN OUR CHANNEL</h3>
+      <p>Get New Tools And methods Here Free For Everyone</p>
+      <a href="https://whatsapp.com/channel/0029VbE1NH99Bb65S8oOnS47" target="_blank" class="modal-btn" onclick="closeModal()">
+        <i class="fa-brands fa-whatsapp"></i> JOIN WHATSAPP CHANNEL
+      </a>
+      <button class="close-btn" onclick="closeModal()">Skip / Close</button>
+    </div>
+  </div>
+
+  <!-- Hero Header Title -->
+  <div class="brand-hero">
+    <img src="https://i.ibb.co/21qmyHBJ/jawadmd.jpg" alt="HASSAN X HACKER Logo" class="hero-logo" onerror="this.src='https://placehold.co/100x100/00b7ff/ffffff?text=HXH'">
+    <h1 class="brand-title">HASSAN X HACKER</h1>
+    <span class="subtitle-badge"><i class="fa-solid fa-bolt"></i> Ultimate YouTube Toolkit</span>
+  </div>
+
+  <!-- Main Workstation Container -->
+  <main class="container">
+    <div class="input-group">
+      <div class="input-wrapper">
+        <i class="fa-brands fa-youtube"></i>
+        <input type="text" id="ytUrl" placeholder="Paste YouTube Video URL here..." autocomplete="off">
+        <button class="clear-btn" id="clearBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <button class="btn-action" onclick="fetchMedia()">
+        <i class="fa-solid fa-download"></i> FETCH ALL MEDIA ⚡
+      </button>
+    </div>
+
+    <!-- Output Section -->
+    <section class="result-section" id="results">
+      <h3 style="color: var(--neon-green); margin-bottom: 20px; text-align: center; font-size: 16px; letter-spacing: 1px;">
+        <i class="fa-solid fa-photo-film"></i> DOWNLOAD THUMBNAILS
+      </h3>
+      
+      <!-- Max Resolution -->
+      <div class="thumb-box">
+        <p>Ultra HD Quality (1080p / 4K)</p>
+        <img id="imgMax" src="" alt="Max Quality Preview">
+        <div class="btn-group-res">
+          <a id="btnMax" href="" target="_blank" download class="dl-btn">
+            <i class="fa-solid fa-download"></i> Download Ultra HD
+          </a>
+          <button class="dl-btn copy-btn" onclick="copyLink('imgMax')">
+            <i class="fa-regular fa-copy"></i> Copy Link
+          </button>
+        </div>
+      </div>
+
+      <!-- High Quality -->
+      <div class="thumb-box">
+        <p>High Quality (720p)</p>
+        <img id="imgHq" src="" alt="High Quality Preview">
+        <div class="btn-group-res">
+          <a id="btnHq" href="" target="_blank" download class="dl-btn">
+            <i class="fa-solid fa-download"></i> Download HQ
+          </a>
+          <button class="dl-btn copy-btn" onclick="copyLink('imgHq')">
+            <i class="fa-regular fa-copy"></i> Copy Link
+          </button>
+        </div>
+      </div>
+
+      <!-- Medium Quality -->
+      <div class="thumb-box">
+        <p>Standard Quality (480p)</p>
+        <img id="imgMq" src="" alt="Medium Quality Preview">
+        <div class="btn-group-res">
+          <a id="btnMq" href="" target="_blank" download class="dl-btn">
+            <i class="fa-solid fa-download"></i> Download SD
+          </a>
+          <button class="dl-btn copy-btn" onclick="copyLink('imgMq')">
+            <i class="fa-regular fa-copy"></i> Copy Link
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Developer WhatsApp Button -->
+  <a href="https://whatsapp.com/channel/0029VbE1NH99Bb65S8oOnS47" target="_blank" class="dev-btn">
+    <i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> DEVELOPER NO
+  </a>
+
+  <!-- Toast Element -->
+  <div class="toast-msg" id="toast"><i class="fa-solid fa-circle-info"></i> <span id="toastText">Notification</span></div>
+
+  <script>
+    /* ========================================================
+       1. DRAWER & MENU UI LOGIC
+       ======================================================== */
+    const menuToggle = document.getElementById('menuToggle');
+    const drawerMenu = document.getElementById('drawerMenu');
+    const drawerClose = document.getElementById('drawerClose');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    const ytInput = document.getElementById('ytUrl');
+    const clearBtn = document.getElementById('clearBtn');
+
+    function openDrawer() {
+      drawerMenu.classList.add('active');
+      drawerOverlay.classList.add('active');
+    }
+
+    function closeDrawer() {
+      drawerMenu.classList.remove('active');
+      drawerOverlay.classList.remove('active');
+    }
+
+    menuToggle.addEventListener('click', openDrawer);
+    drawerClose.addEventListener('click', closeDrawer);
+    drawerOverlay.addEventListener('click', closeDrawer);
+
+    // Input Clear Button Toggle
+    ytInput.addEventListener('input', () => {
+      clearBtn.style.display = ytInput.value.trim() ? 'block' : 'none';
+    });
+
+    clearBtn.addEventListener('click', () => {
+      ytInput.value = '';
+      clearBtn.style.display = 'none';
+      document.getElementById('results').style.display = 'none';
+      ytInput.focus();
+    });
+
+    // Custom Toast Notification
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastText').innerText = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    /* ========================================================
+       2. MULTI-BACKGROUND CANVAS ANIMATION CONTROLLER (5 STYLES)
+       ======================================================== */
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let width = 0, height = 0, dpr = 1;
+    let currentMode = 1;
+    let animId = null;
+    let mouse = { x: null, y: null, radius: 120 };
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    function resizeCanvas() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      initCurrentBackground();
+    }
+
+    window.addEventListener('resize', resizeCanvas, { passive: true });
+
+    // --- MODE 1: MATRIX CYBER RAIN (Default) ---
+    const matrixChars = '01アイウエオカキクケコ<>[]{}#$%';
+    let matrixDrops = [];
+    let matrixFontSize = 15;
+
+    function initMatrix() {
+      const columns = Math.ceil(width / matrixFontSize);
+      matrixDrops = Array.from({ length: columns }, () => Math.random() * (height / matrixFontSize));
+    }
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(3, 9, 20, 0.12)';
+      ctx.fillRect(0, 0, width, height);
+      ctx.font = matrixFontSize + 'px monospace';
+      for (let i = 0; i < matrixDrops.length; i++) {
+        const char = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+        ctx.fillStyle = i % 4 === 0 ? 'rgba(167, 139, 250, 0.85)' : 'rgba(0, 190, 255, 0.8)';
+        ctx.fillText(char, i * matrixFontSize, matrixDrops[i] * matrixFontSize);
+        if (matrixDrops[i] * matrixFontSize > height && Math.random() > 0.975) {
+          matrixDrops[i] = 0;
+        }
+        matrixDrops[i] += 0.55;
+      }
+    }
+
+    // --- MODE 2: CONSTELLATION NODE WEB ---
+    let particles = [];
+    function initConstellation() {
+      particles = [];
+      const count = Math.min(Math.floor((width * height) / 9000), 100);
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 1.2,
+          vy: (Math.random() - 0.5) * 1.2,
+          radius: Math.random() * 2 + 1.5
+        });
+      }
+    }
+
+    function drawConstellation() {
+      ctx.fillStyle = '#030914';
+      ctx.fillRect(0, 0, width, height);
+
+      for (let i = 0; i < particles.length; i++) {
+        let p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = '#00b7ff';
+        ctx.fill();
+
+        for (let j = i + 1; j < particles.length; j++) {
+          let p2 = particles[j];
+          let dx = p.x - p2.x;
+          let dy = p.y - p2.y;
+          let dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 120) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(139, 92, 246, ${1 - dist / 120})`;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    // --- MODE 3: NEON CYBER GRID ---
+    let gridOffset = 0;
+    function drawGrid() {
+      ctx.fillStyle = '#030712';
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.strokeStyle = 'rgba(0, 183, 255, 0.25)';
+      ctx.lineWidth = 1;
+
+      const horizon = height * 0.45;
+      gridOffset = (gridOffset + 0.8) % 30;
+
+      // Vertical lines
+      const cx = width / 2;
+      for (let x = -width; x < width * 2; x += 40) {
+        ctx.beginPath();
+        ctx.moveTo(x, height);
+        ctx.lineTo(cx + (x - cx) * 0.08, horizon);
+        ctx.stroke();
+      }
+
+      // Horizontal lines
+      for (let y = horizon; y < height; y += 15) {
+        let lineY = y + (gridOffset % 15);
+        if (lineY > height) continue;
+        ctx.beginPath();
+        ctx.moveTo(0, lineY);
+        ctx.lineTo(width, lineY);
+        ctx.strokeStyle = `rgba(139, 92, 246, ${(lineY - horizon) / (height - horizon)})`;
+        ctx.stroke();
+      }
+    }
+
+    // --- MODE 4: COSMIC NEBULA & STARS ---
+    let stars = [];
+    function initCosmic() {
+      stars = [];
+      for (let i = 0; i < 150; i++) {
+        stars.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          size: Math.random() * 2,
+          alpha: Math.random(),
+          speed: Math.random() * 0.02 + 0.005
+        });
+      }
+    }
+
+    function drawCosmic() {
+      ctx.fillStyle = 'rgba(2, 6, 18, 0.4)';
+      ctx.fillRect(0, 0, width, height);
+
+      let grad = ctx.createRadialGradient(width / 2, height / 2, 50, width / 2, height / 2, width * 0.6);
+      grad.addColorStop(0, 'rgba(139, 92, 246, 0.12)');
+      grad.addColorStop(0.5, 'rgba(0, 183, 255, 0.08)');
+      grad.addColorStop(1, 'transparent');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, width, height);
+
+      for (let s of stars) {
+        s.alpha += s.speed;
+        if (s.alpha > 1 || s.alpha < 0) s.speed = -s.speed;
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(s.alpha)})`;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // --- MODE 5: DEEP LIQUID WAVES ---
+    let waveStep = 0;
+    function drawWaves() {
+      ctx.fillStyle = '#020813';
+      ctx.fillRect(0, 0, width, height);
+      waveStep += 0.015;
+
+      for (let i = 0; i < 3; i++) {
+        ctx.beginPath();
+        ctx.moveTo(0, height);
+        for (let x = 0; x <= width; x += 20) {
+          let y = Math.sin(x * 0.005 + waveStep + i) * 35 + height * 0.7 + (i * 40);
+          ctx.lineTo(x, y);
+        }
+        ctx.lineTo(width, height);
+        ctx.closePath();
+        ctx.fillStyle = i === 0 ? 'rgba(0, 183, 255, 0.15)' : (i === 1 ? 'rgba(139, 92, 246, 0.15)' : 'rgba(0, 229, 255, 0.1)');
+        ctx.fill();
+      }
+    }
+
+    // Master Animation Loop
+    function render() {
+      if (currentMode === 1) drawMatrix();
+      else if (currentMode === 2) drawConstellation();
+      else if (currentMode === 3) drawGrid();
+      else if (currentMode === 4) drawCosmic();
+      else if (currentMode === 5) drawWaves();
+      animId = requestAnimationFrame(render);
+    }
+
+    function initCurrentBackground() {
+      if (currentMode === 1) initMatrix();
+      else if (currentMode === 2) initConstellation();
+      else if (currentMode === 4) initCosmic();
+    }
+
+    // Switch Background Listener
+    document.querySelectorAll('.bg-opt-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.bg-opt-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        currentMode = parseInt(this.getAttribute('data-bg'));
+        initCurrentBackground();
+        closeDrawer();
+        showToast(`Theme Switch: Mode ${currentMode}`);
+      });
+    });
+
+    // Start Animation Engine
+    resizeCanvas();
+    render();
+
+    /* ========================================================
+       3. CORE MEDIA EXTRACTION & MODAL LOGIC
+       ======================================================== */
+    // Close Popup Modal
+    function closeModal() {
+      document.getElementById('waModal').style.display = 'none';
+    }
+
+    // Extract YouTube Video ID
+    function getYoutubeId(url) {
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      const match = url.match(regExp);
+      return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    // Fetch All Media Logic
+    function fetchMedia() {
+      const url = document.getElementById('ytUrl').value.trim();
+      const videoId = getYoutubeId(url);
+
+      if (!videoId) {
+        showToast("⚠️ Please enter a valid YouTube Video Link!");
+        return;
+      }
+
+      // Thumbnail Image URLs
+      const maxRes = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+      const hqRes = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+      const mqRes = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+
+      // Set Image Sources & Download Links
+      document.getElementById('imgMax').src = maxRes;
+      document.getElementById('btnMax').href = maxRes;
+
+      document.getElementById('imgHq').src = hqRes;
+      document.getElementById('btnHq').href = hqRes;
+
+      document.getElementById('imgMq').src = mqRes;
+      document.getElementById('btnMq').href = mqRes;
+
+      // Reveal Results Section with Animation
+      const resSection = document.getElementById('results');
+      resSection.style.display = 'block';
+      resSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      showToast("⚡ Thumbnails Fetched Successfully!");
+    }
+
+    // Copy Thumbnail URL Function
+    function copyLink(imgElementId) {
+      const imgSrc = document.getElementById(imgElementId).src;
+      if (!imgSrc) return;
+      
+      const tempInput = document.createElement("input");
+      tempInput.value = imgSrc;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+
+      showToast("📋 Image URL Copied to Clipboard!");
+    }
+  </script>
+</body>
+</html>
